@@ -27,7 +27,7 @@ npm 8.1.0
 ####Install all dependencies:
 ### `npm install`
 ### `npm run client:install`
-(Installs dependencies for the client)
+(Installs dependencies for the client)\
 ####Available scripts:
 ### `npm run dev`
 Runs the server and client in development mode.

@@ -1,5 +1,0 @@
-{
-  "port":5000,
-  "jwt": "secretKey",
-  "mongoUri": "mongodb+srv://akezhanissadilov:akezhan@cluster0.ki3jy.mongodb.net/publicblogapp?retryWrites=true&w=majority"
-}

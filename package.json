@@ -1,0 +1,34 @@
+{
+  "name": "public-blog-app",
+  "version": "1.0.0",
+  "description": "Public Blog App by bliny-so-smetanoi 2021",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix frontend",
+    "client:build": "npm run build --prefix frontend",
+    "client:install": "npm install --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [
+    "node",
+    "react",
+    "express",
+    "mongo"
+  ],
+  "author": "Akezhan Issadilov <akezhan.issadilov@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "config": "^3.3.6",
+    "cross-env": "^7.0.3",
+    "express": "^4.17.1",
+    "express-validator": "^6.13.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.14"
+  },
+  "devDependencies": {
+    "concurrently": "^6.4.0",
+    "nodemon": "^2.0.15"
+  }
+}

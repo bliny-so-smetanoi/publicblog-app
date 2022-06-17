@@ -4,6 +4,7 @@
   "description": "Public Blog App by bliny-so-smetanoi 2021",
   "main": "index.js",
   "scripts": {
+    "start":  "cross-env NODE_ENV=production node index.js",
     "server": "nodemon index.js",
     "client": "npm run start --prefix frontend",
     "client:build": "npm run build --prefix frontend",

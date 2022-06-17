@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "bf3a5732-1999-4b9d-91c2-f88e233fe81d",
+		"_postman_id": "18a0686d-06a9-4775-9833-dcffd097e905",
 		"name": "public-blog-app",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -110,6 +110,66 @@
 			"response": []
 		},
 		{
+			"name": "/api/articles/",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 62ab528e9c1785b089bf25fa",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/articles/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"articles",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/articles/:id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/articles/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"articles",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/api/articles/create",
 			"request": {
 				"method": "POST",
@@ -135,6 +195,40 @@
 						"api",
 						"articles",
 						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/articles/comments/:id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5000/api/articles/comments/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"articles",
+						"comments",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "61a89633b37d20a4eb57af13"
+						}
 					]
 				}
 			},
@@ -173,12 +267,21 @@
 			"response": []
 		},
 		{
-			"name": "/api/articles/",
+			"name": "/api/articles/like",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"61e43b66410f86dfc64e26fe\",\n    \"userId\": \"62ab528e9c1785b089bf25fa\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "http://localhost:5000/api/articles/",
+					"raw": "http://localhost:5000/api/articles/like",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -187,25 +290,28 @@
 					"path": [
 						"api",
 						"articles",
-						""
+						"like"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/api/articles/comments/:id",
+			"name": "/api/articles/like",
 			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"61e43b66410f86dfc64e26fe\",\n    \"userId\": \"62ab528e9c1785b089bf25fa\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
 					}
-				],
+				},
 				"url": {
-					"raw": "http://localhost:5000/api/articles/comments/:id",
+					"raw": "http://localhost:5000/api/articles/like",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -214,14 +320,7 @@
 					"path": [
 						"api",
 						"articles",
-						"comments",
-						":id"
-					],
-					"variable": [
-						{
-							"key": "id",
-							"value": "61a89633b37d20a4eb57af13"
-						}
+						"like"
 					]
 				}
 			},

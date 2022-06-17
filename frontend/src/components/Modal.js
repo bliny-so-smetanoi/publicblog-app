@@ -3,10 +3,12 @@ import {AuthContext} from "../context/AuthContext";
 import {useHttp} from "../hooks/http-hook";
 import ReactTooltip from "react-tooltip";
 import Loader from "./Loader";
+import {useNavigate} from "react-router-dom";
 
 export default function Modal(props){
     const auth = useContext(AuthContext)
 
+    const navigate = useNavigate()
     const [success, setSuccess] = useState(false)
     const [warning,setWarning] = useState(false)
     const [registrationOpen, setReg] = useState(false)
@@ -52,7 +54,7 @@ export default function Modal(props){
 
             const data = await request('/api/auth/login','POST',{...form})
             auth.login(data.token, data.userId)
-
+            window.location.reload()
             props.onClose()
         }catch (e){}
     }

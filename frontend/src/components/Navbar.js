@@ -11,7 +11,7 @@ export default function Navbar(){
 
     function logoutHandler(){
         logout()
-        navigate('/')
+        window.location.reload()
     }
 
     if(isAuth){

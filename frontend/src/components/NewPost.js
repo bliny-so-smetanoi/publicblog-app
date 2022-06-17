@@ -28,7 +28,7 @@ export default function NewPost(props){
 
     return(
         <>
-            <div className={'homepage-main-create'} style={{display:'flex',flexDirection:'column', width:'60%'}}>
+            <div className={'homepage-main-create'} style={{display:'flex',flexDirection:'column'}}>
                 <p style={{display: 'flex',color:'#501B1D', justifyContent:'space-between',fontSize:'20px'}}>{isAuth&&'Create new post:'}{!isAuth&&'In order to create post you need to log in'}<button style={{color:'#501B1D',backgroundColor:'white',border:'1px solid #501B1D',borderRadius:'5px'}} onClick={createPost} disabled={!isAuth}>Create post</button></p>
                 <input style={{padding:'5px',outlineColor:'#501B1D'}} disabled={!isAuth} onChange={handleChange} name={'title'} type={'text'} placeholder={'Title'} value={form.title}/>
                 <textarea disabled={!isAuth} onChange={handleChange} name={'body_text'} value={form.body_text} placeholder={'Write your text here'} style={{resize:'none'}} cols={40} rows={10}/>

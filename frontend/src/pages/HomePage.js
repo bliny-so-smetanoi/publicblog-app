@@ -5,25 +5,32 @@ import NewPost from "../components/NewPost";
 import Account from "../components/Account";
 import {AuthContext} from "../context/AuthContext";
 export default function HomePage(){
+    const {isAuth, userId} = useContext(AuthContext)
     const {loading,request} = useHttp()
     const [articles, setArticles] = useState()
-    const {isAuth, userId} =useContext(AuthContext)
 
-    const fetchArticles = useCallback(async()=>{
-        try{
-            const fetched = await request('/api/articles/')
+        const fetchAuth = useCallback(async()=> {
+            const id = JSON.parse(localStorage.getItem('userData'))
+            console.log(localStorage.getItem('userData'))
+            console.log(id)
+            if(id === null) {
+                const fetched = await request('/api/articles/', 'GET', null, {'Authorization': 'Bearer ' + ' '})
+                setArticles(fetched)
+                return
+            }
+
+            const fetched = await request('/api/articles/', 'GET', null, {'Authorization': 'Bearer ' + id['userId']})
             setArticles(fetched)
-        }catch (e){}
-    },[request])
+        }, [request])
 
-    useEffect(()=>{
-        fetchArticles()
-    },[fetchArticles])
+        useEffect(()=>{
+            fetchAuth()
+        },[fetchAuth])
 
     return(
         <>
             <main className={'homepage-main'}>
-                <div style={{display:'flex', flexDirection:'row',justifyContent:'space-between'}}><NewPost onCreate={fetchArticles}/>
+                <div className={'homepage-main-header'}><NewPost onCreate={fetchAuth}/>
                 <div className={'homepage-account'}>
                     {(isAuth&&userId!==null)&&<Account/>}
                     {loading&&<div>Loading...</div>}

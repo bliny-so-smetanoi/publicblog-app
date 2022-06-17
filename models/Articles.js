@@ -5,7 +5,7 @@ const schema = new Schema({
     name: {type: String, required:true},
     title: {type: String, required: true},
     body_text: {type: String, required: true},
-    likes: {type: Number},
+    likes: {type: Array, required: true},
     date_time: {type: Date, required: true}
 }, {versionKey: false})
 

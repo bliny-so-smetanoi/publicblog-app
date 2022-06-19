@@ -117,7 +117,7 @@ export default function Article(props){
                     <img className={'article-image'}
                          onLoad={()=>setImageIsLoading(false)}
                          width={'800px'}
-                         src={`https://publicblogappqazaqstan.herokuapp.com/api/files/download/${article.image}`}
+                         src={`https://publicblogapp.herokuapp.com/api/files/download/${article.image}`}
                          loading={'lazy'}/> </div>}
                 <div style={{display:'flex',
                     flexDirection:'column'}}>

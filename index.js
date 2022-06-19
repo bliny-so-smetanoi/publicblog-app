@@ -9,6 +9,7 @@ app.use(express.json({extended: true}))
 
 app.use('/api/auth', require('./routes/authorization-routes'))
 app.use('/api/articles', require('./routes/article-routes'))
+app.use('/api/files', require('./routes/files-routes'))
 
 if(process.env.NODE_ENV==='production'){
     app.use('/',express.static(path.join(__dirname,'frontend','build')))

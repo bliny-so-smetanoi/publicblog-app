@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
+html{
+    scroll-behavior: smooth;
+}
 body{
     margin: 0;
     padding: 0;
@@ -7,7 +10,7 @@ body{
 }
 textarea{
     padding: 10px;
-    outline-color: #501B1D;
+    outline-style: none;
     font-family: 'Raleway', sans-serif;
 }
 /*Footer*/
@@ -18,11 +21,12 @@ textarea{
     text-align: center;
     align-items: center;
     color: #eeeeee;
+    font-size: 15px;
 }
 .footer-main{
     display: flex;
     justify-content: center;
-    min-height: 100px;
+    min-height: 90px;
     background-color: #501B1D;
 }
 
@@ -30,8 +34,9 @@ textarea{
 .button-comment{
     border-radius: 5px;
     padding: 5px;
-    text-decoration: underline;
+    text-decoration: none;
     font-size: 14px;
+    cursor: pointer;
 }
 .send-comment {
     display: flex;
@@ -51,12 +56,43 @@ textarea{
     flex-direction: row;
     justify-content: space-between
 }
+.more-posts-button{
+    border: 1px solid #501B1D;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
 .homepage-main-create{
-    border: 3px #501B1D dashed;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
     padding: 15px;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: white;
     width: 60%;
+}
+.homepage-input-container{
+    text-align:center;
+    padding:3%;
+    border:thin dashed lightgray;
+}
+.create-button{
+    color:#501B1D;
+    background-color:white;
+    border:1px solid #501B1D;
+    border-radius:5px;
+    cursor: pointer;
+    padding: 8px;
+}
+.create-button:active {
+    background: #501B1D;
+    color: white;
+}
+.homepage-input-label{
+    cursor:pointer;
+    margin-top: 10px
+}
+#input-file{
+    display: none;
 }
 .homepage-main-article-card{
     display: flex;
@@ -78,7 +114,7 @@ textarea{
     flex-direction: column;
     min-height: 900px;
     margin: auto;
-    width: 60%;
+    width: 50%;
 }
 .homepage-main-article-comment{
     border-bottom: 1px solid lightgray;
@@ -137,11 +173,12 @@ button {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 60%;
+    width: 50%;
     padding: 20px;
-    background-color: #501B1D;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 .navbar-main{
     display: flex;
@@ -182,7 +219,38 @@ button {
     border-bottom: 1px solid #eee;
 }
 /* #501B1D */
+/*Up button*/
+#myBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: 1px solid gray; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: white; /* Set a background color */
+    color: #501B1D; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 18px; /* Increase font size */
+    transition: 1s;
+}
 
+#myBtn:hover {
+    background-color: #501B1D; /* Add a dark-grey background on hover */
+    color: white;
+}
+.arrow {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 5px;
+}
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
 /*Loader*/
 .lds-ring {
     display: inline-block;
@@ -211,6 +279,7 @@ button {
 .lds-ring div:nth-child(3) {
     animation-delay: -0.15s;
 }
+
 @keyframes lds-ring {
     0% {
         transform: rotate(0deg);
@@ -220,6 +289,7 @@ button {
     }
 }
 @media (max-width: 500px) {
+
     .homepage-account {
         display: none;
     }
@@ -234,6 +304,24 @@ button {
         width: 90%;
     }
     .navbar-block {
-        width: 90%;
+        width: 100%;
+        border-radius: 0;
     }
+    .article-image{
+        width: 400px;
+    }
+    .input-image {
+        width: 400px;
+    }
+
 }
+
+@media not all and (min-resolution:.001dpcm)
+{ @supports (-webkit-appearance:none) and (stroke-color:transparent) {
+    .article-image {
+        width: 300px;
+    }
+    .input-image {
+        width: 300px;
+    }
+}}

@@ -5,9 +5,10 @@ const Users = require('../models/Users')
 const {Types} = require("mongoose");
 const router = Router()
 
-// /api/articles/
-router.get('/', async(req,res)=>{
+// /api/articles/get/:page
+router.get('/get/:page', async(req,res)=>{
     try{
+        const pageNumber = +req.params.page
         const id = req.get('Authorization').split(' ')[1]
 
         if (id !== 'undefined' || id !== undefined) {
@@ -36,14 +37,11 @@ router.get('/', async(req,res)=>{
                         }
                     }
                 ]
-            ).sort({date_time: 'descending'})
+            ).sort({date_time: 'descending'}).skip(pageNumber * 3).limit(3)
 
-            res.status(200).json(articles).end()
-
-            return
+            return res.status(200).json(articles).end()
         }
 
-        if (id === undefined) {
             const articles = await Articles.aggregate(
                 [
                     {
@@ -61,16 +59,9 @@ router.get('/', async(req,res)=>{
                         }
                     }
                 ]
-            ).sort({date_time: 'descending'})
+            ).sort({date_time: 'descending'}).skip(pageNumber * 3).limit(3)
 
-            res.status(200).json(articles).end()
-
-            return
-        }
-
-        const articles = await Articles.find({}).sort({date_time: 'descending'})
-
-        res.status(200).json(articles)
+        return res.status(200).json(articles).end()
 
     }catch (e){
         console.error(e.message)
@@ -81,7 +72,7 @@ router.get('/', async(req,res)=>{
 // /api/articles/create
 router.post('/create', async(req,res)=>{
     try{
-        const {author, title, body_text} = req.body
+        const {author, title, body_text, image} = req.body
         if(title === '' || body_text === '') {
             res.status(500).json({message: 'Title or body is empty'})
             return
@@ -96,13 +87,15 @@ router.post('/create', async(req,res)=>{
             title,
             body_text,
             date_time,
-            likes: new Array(0)
+            likes: new Array(0),
+            image
         })
 
         await newArticle.save()
 
         res.status(200).json({message: 'New article successfully created!'})
     }catch (e){
+        console.log(e)
         res.status(500).json({message:'Unable to create article'})
     }
 })

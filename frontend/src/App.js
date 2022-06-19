@@ -5,6 +5,7 @@ import {useAuth} from "./hooks/auth-hook";
 import HomePage from "./pages/HomePage";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 export default function App() {
     const {token,login,logout,userId} = useAuth()
@@ -18,9 +19,11 @@ export default function App() {
             }}>
 
                 <BrowserRouter>
+
                     <Navbar/>
                     <Routes>
                         <Route path={'/'} element={<HomePage/>}/>
+                        <Route path={'/profile'} element={<ProfilePage/>}/>
                         <Route path={'*'} element={<HomePage/>}/>
                     </Routes>
 

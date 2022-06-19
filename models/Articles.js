@@ -6,7 +6,8 @@ const schema = new Schema({
     title: {type: String, required: true},
     body_text: {type: String, required: true},
     likes: {type: Array, required: true},
-    date_time: {type: Date, required: true}
+    date_time: {type: Date, required: true},
+    image: {type: String}
 }, {versionKey: false})
 
 module.exports = model('Articles', schema)

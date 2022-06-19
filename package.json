@@ -4,7 +4,7 @@
   "description": "Public Blog App by bliny-so-smetanoi 2021",
   "main": "index.js",
   "scripts": {
-    "start":  "cross-env NODE_ENV=production node index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
     "server": "nodemon index.js",
     "client": "npm run start --prefix frontend",
     "client:build": "npm run build --prefix frontend",
@@ -22,11 +22,15 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "config": "^3.3.6",
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "express-validator": "^6.13.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.14"
+    "mongodb": "^4.7.0",
+    "mongoose": "^6.0.14",
+    "multer": "^1.4.4",
+    "multer-gridfs-storage": "^5.0.2"
   },
   "devDependencies": {
     "concurrently": "^6.4.0",

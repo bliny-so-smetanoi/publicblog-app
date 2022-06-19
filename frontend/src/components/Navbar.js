@@ -19,8 +19,15 @@ export default function Navbar(){
             <>
                 <nav className={'navbar-main'}>
                     <div className={'navbar-block'}>
-                        <NavLink style={{textDecoration:'none',color:'white', fontSize: '25px'}} to={'/'}><b>Public Blog App</b></NavLink>
-                        <button style={{borderRadius:'5px',border:'1px solid #501B1D',color:'#501B1D',backgroundColor:'white'}} onClick={logoutHandler}>Log out</button>
+                        <NavLink style={{textDecoration:'none',
+                            color:'#501B1D',
+                            fontSize: '25px'}} to={'/'}><b>Public Blog App</b></NavLink>
+                        <button style={{borderRadius:'5px',
+                            border:'1px solid #501B1D',
+                            color:'#501B1D',
+                            backgroundColor:'white',
+                            cursor: 'pointer'}}
+                                onClick={logoutHandler}>Log out</button>
                     </div>
                 </nav>
             </>
@@ -31,11 +38,19 @@ export default function Navbar(){
         <>
             <nav className={'navbar-main'}>
                 <div className={'navbar-block'}>
-                    <NavLink style={{textDecoration:'none',color:'white',fontSize: '25px'}} to={'/'}><b>Public Blog App</b></NavLink>
-                    <button style={{borderRadius:'5px',border:'1px solid #501B1D',color:'#501B1D',backgroundColor:'white'}} onClick={()=>setShow(true)}>Log in</button>
+                    <NavLink style={{textDecoration:'none',
+                        color:'#501B1D',
+                        fontSize: '25px'}} to={'/'}><b>Public Blog App</b></NavLink>
+                    <button style={{borderRadius:'5px',
+                        border:'1px solid #501B1D',
+                        color:'#501B1D',
+                        backgroundColor:'white',
+                        cursor: 'pointer'}}
+                            onClick={()=>setShow(true)}>Log in</button>
                 </div>
             </nav>
-            <Modal show={show} onClose={()=>setShow(false)}/>
+            <Modal show={show}
+                   onClose={()=>setShow(false)}/>
         </>
     )
 }

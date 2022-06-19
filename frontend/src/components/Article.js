@@ -81,7 +81,7 @@ export default function Article(props){
                 <div style={{display: 'flex',
                     justifyContent:'space-between'}}
                      align={'left'}> <span> {article.name}
-                    {article.author === userId && <b style={{color: '#501B1D'}}>you</b>} </span>
+                    {article.author === userId && <b style={{color: '#501B1D'}}> you</b>} </span>
                     {article.likesCount !== 0 && <span style={{fontSize: '16px'}}>
                         {/*{article.likesCount} {article.likesCount > 1 ? 'people' : 'person'} liked this*/}
                     </span>}

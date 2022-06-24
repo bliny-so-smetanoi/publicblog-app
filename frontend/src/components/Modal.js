@@ -4,10 +4,11 @@ import {useHttp} from "../hooks/http-hook";
 import ReactTooltip from "react-tooltip";
 import Loader from "./Loader";
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 export default function Modal(props){
     const auth = useContext(AuthContext)
-
+    const {t, i18n} = useTranslation()
     const navigate = useNavigate()
     const [success, setSuccess] = useState(false)
     const [warning,setWarning] = useState(false)
@@ -94,45 +95,45 @@ export default function Modal(props){
             <div className={'modal'}>
                 <div className={'modal-content'}>
                     <div className={'modal-header'}>
-                        <h3 style={{color:"#501B1D"}}>{registrationOpen?'Sign up':'Log in'}</h3>
+                        <h3 style={{color:"#501B1D"}}>{registrationOpen?t('Sign up'):t('Log in')}</h3>
                         {loading && <Loader/>}
-                        <span  onClick={props.onClose}>&#10005;</span>
+                        <span style={{cursor: 'pointer'}} onClick={props.onClose}>&#10005;</span>
                     </div>
                     <div className={'modal-body'}>
                         {(registrationOpen && !success) &&<div>
-                            <div onClick={clearAllErrorsAndMessages}><button onClick={()=>setReg(!registrationOpen)}>&#8617;</button></div>
+                            <div onClick={clearAllErrorsAndMessages}><button style={{cursor: 'pointer'}} onClick={()=>setReg(!registrationOpen)}>&#8617;</button></div>
                             <div align={'center'}>
                                 {msgWarning !==null && msgWarning}
                             <div>
                                 <ReactTooltip/>
-                                <input data-tip={'email should be in format example@mail.com'} className={'signup-input'} placeholder={'Email'} type={'text'} name={'email'} value={regForm.email} onChange={changeRegHandler}/>
+                                <input data-tip={t('email should be in format example@mail.com')} className={'signup-input'} placeholder={'Email'} type={'text'} name={'email'} value={regForm.email} onChange={changeRegHandler}/>
                             </div>
                             <div>
                                 <ReactTooltip/>
-                                <input data-tip={'password should be at least 8 characters'} className={'signup-input'} placeholder={'Password'} type={'password'} name={'password'} value={regForm.password} onChange={changeRegHandler}/>
+                                <input data-tip={t('password should be at least 8 characters')} className={'signup-input'} placeholder={t('Password')} type={'password'} name={'password'} value={regForm.password} onChange={changeRegHandler}/>
                             </div>
                             <div>
                                 <ReactTooltip/>
-                                <input data-tip={'first name should be filled'} className={'signup-input'} placeholder={'First name'} type={'text'} name={'first_name'} value={regForm.first_name} onChange={changeRegHandler}/>
+                                <input data-tip={t('first name should be filled')} className={'signup-input'} placeholder={t('First name')} type={'text'} name={'first_name'} value={regForm.first_name} onChange={changeRegHandler}/>
                             </div>
                             <div>
                                 <ReactTooltip/>
-                                <input data-tip={'last name should be filled'} className={'signup-input'} placeholder={'Last name'} type={'text'} name={'last_name'} value={regForm.last_name} onChange={changeRegHandler}/>
+                                <input data-tip={t('last name should be filled')} className={'signup-input'} placeholder={t('Last name')} type={'text'} name={'last_name'} value={regForm.last_name} onChange={changeRegHandler}/>
                             </div>
                                 <br/>
                                 {(warning && !loading) && <div align={'center'} style={{color:'darkred'}}><p>{error}</p></div>}
                             <div align={'center'}>
-                                <button className={'signup-button'} onClick={registerHandler}>Register</button>
+                                <button style={{cursor: 'pointer'}} className={'signup-button'} onClick={registerHandler}>{t('Register')}</button>
                             </div>
                             </div>
                         </div>}
-                        {success&& <div><p>You registered, in order to log in, please press this button <button onClick={loginFinish}>Log in</button></p></div>}
+                        {success&& <div><p>{t('You registered, in order to log in, please press this button')} <button onClick={loginFinish}>{t('Log in')}</button></p></div>}
                         {!registrationOpen&&<div align={'center'}><div>
                             <div style={{marginBottom:'5px'}} onClick={clearAllErrorsAndMessages}>
                                 <input className={'login-input'} placeholder={'Email'} type={'text'} name={'email'} value={form.email} onChange={changeHandler}/>
                             </div>
                             <div onClick={clearAllErrorsAndMessages}>
-                                <input className={'login-input'} placeholder={'Password'} type={'password'} name={'password'} value={form.password} onChange={changeHandler}/>
+                                <input className={'login-input'} placeholder={t('Password')} type={'password'} name={'password'} value={form.password} onChange={changeHandler}/>
                             </div>
                             <div>
                                 {warning && <div style={{color:'darkred'}}><p>{error}</p></div>}
@@ -140,9 +141,9 @@ export default function Modal(props){
                             </div>
                         </div>
                         <div>
-                            <p onClick={clearAllErrorsAndMessages}>Do not have account yet? <span style={{textDecoration: 'underline',color:'#501B1D'}} onClick={()=>setReg(!registrationOpen)}>Sign up</span>.</p>
+                            <p onClick={clearAllErrorsAndMessages}>{t('Do not have account yet?')} <span style={{textDecoration: 'underline',color:'#501B1D', cursor: 'pointer'}} onClick={()=>setReg(!registrationOpen)}>{t('Sign up')}</span>.</p>
                         </div>
-                            <button className={'login-button'} onClick={loginHandler}>Enter</button></div>}
+                            <button className={'login-button'} onClick={loginHandler}>{t('Enter')}</button></div>}
                     </div>
                     <div className={'modal-footer'}>
 

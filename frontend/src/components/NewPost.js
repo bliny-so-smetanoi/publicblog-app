@@ -2,12 +2,14 @@ import {useContext, useState} from "react";
 import {AuthContext} from "../context/AuthContext";
 import {useHttp} from "../hooks/http-hook";
 import {NotificationManager} from "react-notifications";
+import {useTranslation} from "react-i18next";
 
 export default function NewPost(props){
 
     const {userId,isAuth} = useContext(AuthContext)
     const {request} = useHttp()
     const [sending, setSending] = useState(false)
+    const {t, i18n} = useTranslation()
 
     const [form,setForm] = useState({
         body_text: '',
@@ -18,7 +20,7 @@ export default function NewPost(props){
     async function createPost(){
         try{
             if (form.body_text.trim() === '' || form.title.trim() === '') {
-                NotificationManager.error('Title and text cannot be empty!')
+                NotificationManager.error(t('Title and text cannot be empty!'))
                 return
             }
 
@@ -41,7 +43,7 @@ export default function NewPost(props){
                 title: '',
             })
             handleCancel()
-            NotificationManager.success('Posted!')
+            NotificationManager.success(t('Posted!'))
             setSending(false)
         }catch (e){}
     }
@@ -74,11 +76,11 @@ export default function NewPost(props){
                     color:'#501B1D',
                     justifyContent:'space-between',
                     fontSize:'20px'}}>
-                    {isAuth&&'Create new post:'}
+                    {isAuth&& t('Create new post:')}
                     {!isAuth&&'In order to create post you need to log in'}
                     <button className={'create-button'}
                             onClick={createPost}
-                            disabled={sending}>Post</button></p>
+                            disabled={sending}>{t('Post')}</button></p>
                 <input style={{padding:'5px',
                     borderTop: '1px solid lightgray',
                     borderRight: '1px solid lightgray',
@@ -89,12 +91,12 @@ export default function NewPost(props){
                        onChange={handleChange}
                        name={'title'}
                        type={'text'}
-                       placeholder={'Title'} value={form.title}/>
+                       placeholder={t('Title')} value={form.title}/>
                 <textarea disabled={sending}
                           onChange={handleChange}
                           name={'body_text'}
                           value={form.body_text}
-                          placeholder={'Write your text here'}
+                          placeholder={t('Write your text here')}
                           style={{resize:'none',
                               borderTop: 'none',
                               borderRight: '1px solid lightgray',
@@ -114,7 +116,7 @@ export default function NewPost(props){
                         {image === null &&
                             <span style={{fontSize:'15px',
                             color: 'gray'}}
-                                  id={'preview-images'}>select image</span>}
+                                  id={'preview-images'}>{t('select image')}</span>}
                         <img className={'input-image'}
                              width={'500'}
                              id={'image-input'}
@@ -126,7 +128,7 @@ export default function NewPost(props){
                         border:'1px solid lightgray',
                         cursor:'pointer',
                         marginTop: '10px'}}
-                            onClick={handleCancel}>discard image</button>}
+                            onClick={handleCancel}>{t('discard image')}</button>}
             </div>
         </>
     )

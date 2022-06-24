@@ -47,6 +47,38 @@ textarea{
 .send-comment > textarea {
 
 }
+/*Profile page*/
+.profilepage-profile-info {
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+.profilepage-photo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+.profilepage-profile-photo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.profilepage-photo-hover {
+    position: absolute;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    background-color: #501B1D;
+    opacity: 0;
+    border-radius: 50%;
+    transition: 1s;
+}
+.profilepage-photo-hover:hover {
+    opacity: 50%;
+}
+
 /*Home page*/
 .homepage-account{
     padding: 10px;
@@ -121,6 +153,10 @@ textarea{
     padding: 5px;
     margin-bottom: 5px;
 }
+.reply {
+    margin-left: 30px;
+    font-size: 15px;
+}
 
 /*Login*/
 .login-input{
@@ -167,7 +203,12 @@ button {
     border-radius: 5px;
     background-color: #FFF3F0;
 }
-
+.lang-button {
+    border: 1px solid #501B1D;
+    background-color: #FFF3F0;
+    margin: 5px;
+    cursor: pointer;
+}
 /*Navbar*/
 .navbar-block{
     display: flex;
@@ -241,6 +282,9 @@ button {
     background-color: #501B1D; /* Add a dark-grey background on hover */
     color: white;
 }
+.dropdown-wrapper{
+    border: none
+}
 .arrow {
     border: solid black;
     border-width: 0 3px 3px 0;
@@ -289,7 +333,6 @@ button {
     }
 }
 @media (max-width: 500px) {
-
     .homepage-account {
         display: none;
     }
@@ -298,10 +341,15 @@ button {
         align-items: center;
     }
     .homepage-main-create{
-        width: 100%;
+        width: 90%;
     }
     .homepage-main {
-        width: 90%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .navbar-main{
+        width: 100%;
     }
     .navbar-block {
         width: 100%;
@@ -313,15 +361,27 @@ button {
     .input-image {
         width: 400px;
     }
-
+    .profilepage-profile-info{
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+    }
 }
 
-@media not all and (min-resolution:.001dpcm)
+@media not all and (min-resolution: 150dpi)
 { @supports (-webkit-appearance:none) and (stroke-color:transparent) {
     .article-image {
         width: 300px;
     }
     .input-image {
         width: 300px;
+    }
+    .homepage-main {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+    .navbar-main{
+        width: 100%;
     }
 }}

@@ -6,12 +6,13 @@ import HomePage from "./pages/HomePage";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import RequireAuth from "./components/RequireAuth";
+import UserInfoPage from "./pages/UserInfoPage/UserInfoPage";
 
 export default function App() {
     const {token,login,logout,userId} = useAuth()
 
     const isAuth = !!token
-
     return (
         <>
             <AuthContext.Provider value={{
@@ -23,7 +24,17 @@ export default function App() {
                     <Navbar/>
                     <Routes>
                         <Route path={'/'} element={<HomePage/>}/>
-                        <Route path={'/profile'} element={<ProfilePage/>}/>
+
+                        <Route path={'/profile'} element={
+                            <RequireAuth>
+                                <ProfilePage/>
+                            </RequireAuth>
+                        }/>
+
+                        <Route path={'/user'}>
+                            <Route path={':idUser'} element={<UserInfoPage/>}/>
+                        </Route>
+
                         <Route path={'*'} element={<HomePage/>}/>
                     </Routes>
 

@@ -5,6 +5,7 @@ import NewPost from "../components/NewPost";
 import Account from "../components/Account";
 import {AuthContext} from "../context/AuthContext";
 import Loader from "../components/Loader";
+import {useTranslation} from "react-i18next";
 
 export default function HomePage(){
     const {isAuth, userId} = useContext(AuthContext)
@@ -13,6 +14,7 @@ export default function HomePage(){
     const [articles, setArticles] = useState([])
     const [noMoreArticles, setNoMoreArticles] = useState(false)
     const [moreIsLoading, setMoreIsLoading] = useState(false)
+    const {t, i18n} = useTranslation()
 
     const fetchAuth = useCallback(async()=> {
         setPage(0)
@@ -108,19 +110,23 @@ export default function HomePage(){
         <>
             <main className={'homepage-main'}>
                 <div className={'homepage-main-header'}>
-                    {isAuth && <NewPost onCreate={fetchAuth}/>}
+                    {isAuth && <NewPost onCreate={() => {
+                        window.location.reload()
+                    }}/>}
                 <div className={'homepage-account'}>
                     {(isAuth&&userId!==null)&&<Account/>}
                     {loading&&<div>Loading...</div>}
                 </div>
                 </div>
                 <div className={'homepage-main-container'}>
-                    <p style={{fontSize:'20px'}}>Recent posts:</p>
+                    <p style={{fontSize:'20px'}}>{t('Recent posts:')}</p>
                     {(articles !==undefined && !loading) &&
-                        <ListOfArticles articles={articles}/>}
-                    {/*{(!loading && !noMoreArticles) && <button className={'more-posts-button'} onClick={loadMoreArticles}>more posts...</button>}*/}
-                    {noMoreArticles && <div align={'center'}><p>No more posts...</p></div>}
-                    <button onClick={topFunction} id={'myBtn'} title={'To top'}>Go to top</button>
+                        <ListOfArticles onDelete={() => {
+                            setArticles([])
+                            fetchAuth()
+                        }} articles={articles}/>}
+                    {noMoreArticles && <div align={'center'}><p>{t('No more posts...')}</p></div>}
+                    <button onClick={topFunction} id={'myBtn'} title={'To top'}>{t('Go to top')}</button>
                     {moreIsLoading && <div align={'center'}><Loader/></div>}
             </div>
 

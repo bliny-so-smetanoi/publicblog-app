@@ -7,7 +7,8 @@ const schema = new Schema({
     body_text: {type: String, required: true},
     likes: {type: Array, required: true},
     date_time: {type: Date, required: true},
-    image: {type: String}
+    image: {type: String},
+    edited: {type: Boolean, required: true, default: false}
 }, {versionKey: false})
 
 module.exports = model('Articles', schema)

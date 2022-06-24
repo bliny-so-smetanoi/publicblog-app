@@ -3,6 +3,10 @@ const Articles = require('../models/Articles')
 const Comments = require('../models/Comments')
 const Users = require('../models/Users')
 const {Types} = require("mongoose");
+const {dislike, like} = require("../services/like-service");
+const {fetchArticles, fetchOneArticle, fetchUsersArticles, fetchLikedByUser} = require("../services/articles-service");
+const {fetchOneOrAllComments} = require("../services/comments-service");
+const deleteFile = require("../services/files-service");
 const router = Router()
 
 // /api/articles/get/:page
@@ -12,60 +16,73 @@ router.get('/get/:page', async(req,res)=>{
         const id = req.get('Authorization').split(' ')[1]
 
         if (id !== 'undefined' || id !== undefined) {
-            const articles = await Articles.aggregate(
-                [
-                    {
-                        '$addFields': {
-                            'isLiked': {
-                                '$cond': {
-                                    'if': {
-                                        '$in': [id, '$likes']
-                                    },
-                                    'then': true,
-                                    'else': false
-                                }
-
-                            },
-                            'likesCount': {
-                                '$size': '$likes'
-                            }
-                        },
-                    },
-                    {
-                        '$project': {
-                            'likes': 0
-                        }
-                    }
-                ]
-            ).sort({date_time: 'descending'}).skip(pageNumber * 3).limit(3)
+            const articles = await fetchArticles(true, id, pageNumber)
 
             return res.status(200).json(articles).end()
         }
 
-            const articles = await Articles.aggregate(
-                [
-                    {
-                        '$addFields': {
-                            'isLiked': false
-                            ,
-                            'likesCount': {
-                                '$size': '$likes'
-                            }
-                        },
-                    },
-                    {
-                        '$project': {
-                            'likes': 0
-                        }
-                    }
-                ]
-            ).sort({date_time: 'descending'}).skip(pageNumber * 3).limit(3)
+        const articles = await fetchArticles(false, id, pageNumber)
 
         return res.status(200).json(articles).end()
 
     }catch (e){
         console.error(e.message)
         res.status(500).json({message: 'Cannot process request, unable to get articles.'})
+    }
+})
+
+// /api/articles/profile/:id
+router.get('/profile/:id', async (req, res) => {
+    try {
+        const userId = req.params.id
+        const userInfo = await Users.findById(userId, 'first_name last_name profile')
+
+        return res.status(200).json(userInfo)
+    } catch (e) {
+        res.status(500).json({message: 'Cannot get user\'s info'})
+    }
+})
+
+// /api/articles/liked
+router.get('/liked/', async (req, res) => {
+    try {
+        const id = req.query.id
+        const page = req.query.page
+        const userId = req.get('Authorization').split(' ')[1]
+
+        if (userId !== undefined) {
+            const likedArticles = await fetchLikedByUser(true, id, page, userId)
+            return res.status(200).json(likedArticles)
+        }
+
+        const likedArticles = await fetchLikedByUser(false, id, page, userId)
+        return res.status(200).json(likedArticles)
+
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({message: 'Cannot get liked articles'})
+    }
+})
+
+// /api/articles/user/?id&page
+router.get('/user/', async (req, res) => {
+    try {
+        const id = req.query.id
+        const page = req.query.page
+
+        const userId = req.get('Authorization').split(' ')[1]
+
+        if (userId !== undefined) {
+            const articles = await fetchUsersArticles(true, userId, page, id)
+            return res.status(200).json(articles)
+        }
+
+        const articles = await fetchUsersArticles(false, userId, page, id)
+        return res.status(200).json(articles)
+
+
+    } catch (e) {
+        res.status(500).json({message: 'Cannot get user\'s articles'})
     }
 })
 
@@ -95,96 +112,38 @@ router.post('/create', async(req,res)=>{
 
         res.status(200).json({message: 'New article successfully created!'})
     }catch (e){
-        console.log(e)
         res.status(500).json({message:'Unable to create article'})
     }
 })
+// /api/articles/delete/:id
+router.delete('/delete/:id', async(req, res) => {
+    try {
+        const articleId = req.params.id
 
+        const deletedArticle = await Articles.findByIdAndDelete(articleId)
+
+        if (deletedArticle.image !== undefined) {
+            await deleteFile(deletedArticle.image)
+        }
+
+        return res.status(200).json({message: 'Deleted'})
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({message: 'Cannot delete post'})
+    }
+})
 // /api/articles/:id
 router.get('/:id', async (req, res) => {
     try {
         const id = req.params.id
         const userId = req.get('Authorization').split(' ')[1]
 
-        const response = await Articles.aggregate([
-            {
-                '$match': {
-                    '$expr': {
-                        '$eq': [
-                            '$_id',
-                            {'$toObjectId': id}
-                        ]
-                    }
-                }
-            },
-            {
-                '$addFields': {
-                    'likesCount': {
-                        '$size': '$likes'
-                    },
-                    'isLiked': {
-                        '$cond': {
-                            'if': {
-                                '$in': [userId, '$likes']
-                            },
-                            'then': true,
-                            'else': false
-                        }
+        const response = await fetchOneArticle(id, userId)
 
-                    }
-                }
-            },
-            {
-                '$project': {
-                    'likes': 0
-                }
-            }
-        ])
-        res.status(200).json(response[0])
+        res.status(200).json(response)
 
     } catch (e) {
         res.status(500).json({message:'Unable to fetch article'})
-    }
-})
-
-// /api/articles/comments/:id
-router.get('/comments/:id', async(req,res)=>{
-    try{
-        const id = req.params.id
-
-        const comments = await Comments.find({article_id: id}).sort({date_time: 'ascending'})
-
-        res.status(200).json(comments)
-
-    }catch (e){
-        res.status(500).json({message:'Cannot process request, comments will not be displayed.'})
-    }
-})
-
-// /api/articles/comments/create
-router.post('/comments/create', async(req,res)=>{
-    try{
-        const {article_id, user_id, body_text} = req.body
-
-        const {first_name, last_name} = await Users.findOne({_id:user_id},'first_name last_name')
-        const name = `${first_name} ${last_name}`
-
-        const date_time = Date.now()
-
-        const newComment = new Comments({
-            article_id,
-            user_id,
-            name,
-            body_text,
-            date_time
-        })
-
-        await newComment.save()
-
-        res.status(200).json({message:'New comment added successfully!'})
-
-    }catch (e){
-        res.status(500).json({message:'Unable to post comment'})
     }
 })
 
@@ -193,38 +152,12 @@ router.post('/like', async (req, res) => {
     try {
         const id = req.body.id
         const userId = req.body.userId
+
         if (userId === undefined) {
-            res.status(401).json({message: 'Unauth'})
+            res.status(401).json({message: 'Unauthorized'})
         }
 
-        const result = await Articles.findByIdAndUpdate(id, {
-            '$push': {'likes': userId}
-        })
-
-        const likesCount = await Articles.aggregate([
-            {
-                '$match': {
-                    '$expr': {
-                        '$eq': [
-                            '$_id',
-                            {'$toObjectId': id}
-                        ]
-                    }
-                }
-            },
-            {
-                '$addFields': {
-                    'likesCount': {
-                        '$size': '$likes'
-                    }
-                }
-            },
-            {
-                '$project': {
-                    'likesCount': 1
-                }
-            }
-        ])
+        const likesCount = await like(id, userId)
 
         res.status(201).json({message: 'Liked', likesCount})
 
@@ -239,35 +172,29 @@ router.delete('/like', async (req, res) => {
         const id = req.body.id
         const userId = req.body.userId
         if (userId === undefined) {
-            res.status(401).json({message: 'Unauth'})
+            res.status(401).json({message: 'Unauthorized'})
         }
-        const result = await Articles.findByIdAndUpdate(id, {
-            '$pull': {'likes': userId}
-        })
-        const likesCount = await Articles.aggregate([
-            {
-                '$match': {
-                    '$expr': {
-                        '$eq': [
-                            '$_id',
-                            {'$toObjectId': id}
-                        ]
-                    }
-                }
-            },
-            {
-                '$addFields': {
-                    'likesCount': {
-                        '$size': '$likes'
-                    }
-                }
-            },
-        ])
+
+        const likesCount = await dislike(id, userId)
 
         res.status(201).json({message: 'Unliked', likesCount})
 
     } catch (e) {
         res.status(500).json({message:'Unable to unlike post'})
+    }
+})
+
+// /api/articles/edit
+router.put('/edit', async (req, res) => {
+    try {
+        const {body_text, title, articleId} = req.body
+
+        await Articles.findByIdAndUpdate(articleId, {'$set': {'body_text': body_text,
+                'title': title, 'edited': true}})
+
+        return res.status(200).json({message: 'Edited'})
+    } catch (e) {
+        res.status(500).json({message: 'Cannot edit'})
     }
 })
 

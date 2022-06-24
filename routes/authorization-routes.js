@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const {check, validationResult}= require('express-validator')
 const Users= require('../models/Users')
 const bcrypt = require('bcrypt')
+const deleteFile = require("../services/files-service");
 
 const router = Router()
 
@@ -34,7 +35,11 @@ router.post('/register',[
             }
             const hashed = await bcrypt.hash(password,12)
 
-            const newUser = new Users({email,first_name,last_name,password:hashed})
+            const newUser = new Users({email,
+                first_name,
+                last_name,
+                password:hashed,
+                profile: {description: ''}})
 
             await newUser.save()
 
@@ -95,6 +100,67 @@ router.post('/info',async(req,res)=>{
 
     }catch (e){
         res.status(500).json({message:'Unable get user info'})
+    }
+})
+
+// /api/auth/profile
+router.get('/profile', async (req, res) => {
+    try {
+        const userId = req.get('Authorization').split(' ')[1]
+
+        const userInfo = await Users.findById(userId, 'first_name last_name profile')
+
+        return res.status(200).json(userInfo)
+    } catch (e) {
+        res.status(500).json({message: 'Cannot get profile info'})
+    }
+})
+
+// /api/auth/profile/edit
+router.put('/profile/edit', async (req, res) => {
+    try {
+        const {first_name, last_name, description} = req.body
+
+        const userId = req.get('Authorization').split(' ')[1]
+
+        await Users.findByIdAndUpdate(userId, {'$set': {'first_name': first_name, 'last_name': last_name, 'profile.description': description}})
+
+        return res.status(200).json({message: 'Updated'})
+
+    }  catch (e) {
+        console.log(e)
+        res.status(500).json({message: 'Cannot edit profile!'})
+    }
+})
+
+// /api/auth/profile/photo
+router.get('/profile/photo', async (req, res) => {
+    try {
+        const userId = req.get('Authorization').split(' ')[1]
+        const userImage = await Users.findById(userId, 'profile.image')
+
+        return res.status(200).json(userImage)
+    } catch (e) {
+        res.status(500).json({message: 'Cannot load image'})
+    }
+})
+
+// /api/auth/profile/photo
+router.post('/profile/photo', async (req, res) => {
+    try {
+        const {photo} = req.body
+        const userId = req.get('Authorization').split(' ')[1]
+
+        const newPhoto = await Users.findByIdAndUpdate(userId, {'$set': {'profile.image': photo}})
+
+        if (newPhoto.profile.image !== '1656063389951-publicblogapp-nopicprofile.jpg') {
+            await deleteFile(newPhoto.profile.image)
+        }
+
+        return res.status(200).json({message: 'Photo added to profile'})
+    } catch (e) {
+        console.log(e)
+        res.status(500).json({message: 'Cannot add image'})
     }
 })
 module.exports = router
